@@ -26,7 +26,7 @@ namespace Library_Management_System.LibraryManagement.Application.Services
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
             {
-                throw new ValidationException("نام کاربری یا رمز عبور اشتباه است");
+                throw new ValidationException("Invalid username or password");
             }
 
             var token = _tokenService.GenerateToken(user);
@@ -52,12 +52,12 @@ namespace Library_Management_System.LibraryManagement.Application.Services
         {
             if (await _unitOfWork.Users.ExistsByUsernameAsync(request.Username))
             {
-                throw new ConflictException("این نام کاربری قبلاً استفاده شده است");
+                throw new ConflictException("This username is already taken");
             }
 
             if (await _unitOfWork.Users.ExistsByEmailAsync(request.Email))
             {
-                throw new ConflictException("این ایمیل قبلاً استفاده شده است");
+                throw new ConflictException("This Email is already taken");
             }
 
             if (!Enum.TryParse<Role>(request.Role, ignoreCase: true, out var roleEnum))
