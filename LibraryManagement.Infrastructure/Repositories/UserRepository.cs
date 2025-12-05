@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Library_Management_System.LibraryManagement.Infrastructure.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class IUserRepository : IUserRepository
     {
         private readonly LibraryDbContext _context;
 
-        public UserRepository(LibraryDbContext context)
+        public IUserRepository(LibraryDbContext context)
         {
             _context = context;
         }
