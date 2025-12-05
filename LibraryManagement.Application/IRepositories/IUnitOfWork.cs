@@ -8,6 +8,7 @@ namespace LibraryManagement.Infrastructure.Interfaces
         IBookRepository Books { get; }
         IBorrowRecordRepository BorrowRecords { get; }
         ICategoryRepository Categories { get; }
+        IUserRepository Users { get; }
 
         Task<int> SaveChangesAsync();
     }
