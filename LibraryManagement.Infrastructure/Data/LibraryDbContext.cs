@@ -12,7 +12,7 @@ namespace Library_Management_System.LibraryManagement.Infrastructure.Data
         public DbSet<Book> Books { get; set; } = null!;
         public DbSet<Category> Categories { get; set; } = null!;
         public DbSet<BorrowRecord> BorrowRecords { get; set; } = null!;
-
+        public DbSet<User> Users { get; set; } = null!;
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -21,12 +21,28 @@ namespace Library_Management_System.LibraryManagement.Infrastructure.Data
                 .HasMany(b => b.Categories)
                 .WithMany(c => c.Books)
                 .UsingEntity(j => j.ToTable("BookCategories"));
+
             modelBuilder.Entity<Book>()
                 .Property(b => b.Price)
                 .HasPrecision(18, 2);
-            SeedData(modelBuilder);
 
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Username)
+                .IsUnique();
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
+
+            modelBuilder.Entity<BorrowRecord>()
+                .HasOne(br => br.User)
+                .WithMany(u => u.BorrowRecords)
+                .HasForeignKey(br => br.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            SeedData(modelBuilder);
         }
+
         private void SeedData(ModelBuilder modelBuilder)
         {
             var author1 = new Author { Id = 1, Name = "Edward", BirthDate = new DateTime(1925, 12, 12), IsActive = true };
@@ -66,11 +82,25 @@ namespace Library_Management_System.LibraryManagement.Infrastructure.Data
                 }
             );
 
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id = 1,
+                    Username = "admin",
+                    Email = "admin@library.com",
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123"),
+                    FullName = "System Administrator",
+                    Role = Role.Admin,
+                    IsActive = true,
+                    CreatedAt = DateTime.Now
+                }
+            );
+
             modelBuilder.Entity<BorrowRecord>().HasData(
                 new BorrowRecord
                 {
                     Id = 1,
-                    UserId = 101,
+                    UserId = 1,
                     BookId = 2,
                     BorrowDate = DateTime.Now.AddDays(-10),
                     Status = BorrowStatus.Active
