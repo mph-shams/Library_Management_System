@@ -13,6 +13,7 @@ namespace LibraryManagement.Infrastructure
         public IBookRepository Books { get; private set; }
         public IBorrowRecordRepository BorrowRecords { get; private set; }
         public ICategoryRepository Categories { get; private set; }
+        public IUserRepository Users { get; }
 
         public UnitOfWork(LibraryDbContext context)
         {
