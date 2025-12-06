@@ -1,4 +1,5 @@
 ﻿using Library_Management_System.LibraryManagement.Infrastructure.Data;
+using Library_Management_System.LibraryManagement.Infrastructure.Repositories;
 using LibraryManagement.Application.IRepositories;
 using LibraryManagement.Infrastructure.Interfaces;
 using LibraryManagement.Infrastructure.Repositories;
@@ -23,6 +24,7 @@ namespace LibraryManagement.Infrastructure
             Books = new BookRepository(context);
             BorrowRecords = new BorrowRecordRepository(context);
             Categories = new CategoryRepository(context);
+            Users = new UserRepository(context);
         }
 
         public async Task<int> SaveChangesAsync()
